@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -12,8 +12,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { DELETETODO , UPDATE_AND_SAVE_TO_DO} from "../redux/slices/todoslice";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useState } from "react";
-
+import { useState, useRef } from "react";
+import { resetScrollToBottom } from '../redux/slices/scrooltobot'
 
    
 
@@ -21,8 +21,23 @@ import { useState } from "react";
 const ListTodos = () => {
   const [Editable, SetEditable] = useState([]);
   const List = useSelector((state) => state.ToDoSlide);
-
+  const BotoomScrool = useSelector((state) => state.ScroolToBottom)
   const dispatch = useDispatch();
+  const BottomScroolRef = useRef(null)
+
+  useEffect(() => {
+    if (BottomScroolRef) {
+      scrollToBottom();
+    }
+  }, [BotoomScrool])
+
+  
+  const scrollToBottom = () => {
+    if (BottomScroolRef.current) {
+      BottomScroolRef.current.scrollToEnd({ animated: true });
+      dispatch(resetScrollToBottom("Lets do it"))
+    }
+  };
 
   const HandleDeleteToDo = (key) => {
     dispatch(DELETETODO(key));
@@ -38,11 +53,13 @@ const ListTodos = () => {
        // Update the InputValue of the object with the specified key
       const updatedEditable = Editable.map(item => item.id === key ? { ...item, InputValue: text } : item);
       SetEditable(updatedEditable);
-      console.log(Editable)
     } else if ( mode === "register") {
       // Add a new object to editable array
       SetEditable([...Editable, { id: key, InputValue: text }]);
     } else {
+      dispatch(UPDATE_AND_SAVE_TO_DO({key, text}))
+      const updatedEditable = Editable.filter(item => item.id !== key);
+      SetEditable(updatedEditable);
 
     }
   };
@@ -57,12 +74,12 @@ const ListTodos = () => {
   }
 
   const image = {
-    uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5NXNzz7f0PX5qwMsCmrWG4neEBmfyYl6aXA&usqp=CAU",
+    uri: "/",
   };
 
   return (
     <View>
-      <ScrollView>
+      <ScrollView ref={BottomScroolRef} >
         {List.map((item) => {
           const editableItem = Editable.find(editable => editable.id === item.id);
           const renderEditable = editableItem ? (
@@ -85,7 +102,7 @@ const ListTodos = () => {
                     <TouchableOpacity onPress={() => { 
                       HandleTheEdit(
                         item.id,
-                        Editable.find(element => element.id === item.id),
+                        Editable.find(element => element.id === item.id).InputValue,
                         "save"
                         )}}>
                       <Ionicons name="checkbox" size={32} color="#87c61f" />
@@ -112,9 +129,9 @@ const ListTodos = () => {
                     style={styles.ListText}
                     onPress={() => HandleTheEdit(item.id, item.text, "register")}
                   >
-                    <View>
-                      <Text style={styles.ActualTodo}>{item.text}</Text>
-                    </View>
+                      <View>
+                          <Text style={styles.ActualTodo}>{item.text}</Text>
+                      </View>
                   </TouchableOpacity>
                   <View style={styles.checkboxstyle}>
                     <TouchableOpacity onPress={() => HandleDeleteToDo(item.id)}>
@@ -143,8 +160,10 @@ const ListTodos = () => {
 
 const styles = StyleSheet.create({
   MainListItem: {
-    borderWidth: 2,
-    height: 40,
+    borderWidth: 0.7,
+    borderColor : '#5B8FB9',
+    borderRadius : 5,
+    
     marginLeft: 15,
     marginTop: 15,
     marginRight: 15,
@@ -157,20 +176,30 @@ const styles = StyleSheet.create({
     justifyContent: "center", // Align children vertically
   },
   ActualTodo: {
-    color: "white",
+    color: "#B6EADA",
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+  textShadowOffset: {width: -1, height: 1},
+  textShadowRadius: 10,
     marginLeft: 10,
   },
   checkboxstyle: {
+    alignContent : 'center',
+    justifyContent : 'center',
     marginLeft: 15,
     marginRight: 15,
   },
   trashstyle: {
     marginRight: 15,
+    alignItems : 'center',
+    justifyContent : 'center'
   },
   image: {
     flex: 1,
     flexDirection: "row",
   },
+  TheTextContainer : {
+    overflow : 'visible'
+  }
 });
 
 export default ListTodos;

@@ -24,13 +24,14 @@ export default function App() {
 const styles = StyleSheet.create({
   MainContainer: {
     flex: 1,
-    backgroundColor : '#F6FDC3'
+    backgroundColor : 'black'
   },
   MainNavBar: {
-    backgroundColor : '#F6FDC3',
-    flex: 0.099,
+    backgroundColor : '#03001C',
+    flex: 0.12,
     flexDirection: "row", 
     borderBottomWidth: 2,
+    borderBottomColor : '#5B8FB9',
     alignItems: "flex-end",
     marginBottom: 10,
     paddingBottom: 10,
@@ -41,10 +42,10 @@ const styles = StyleSheet.create({
     fontSize: 19,
     marginLeft: 15,
     marginRight: 190,
-    
+    color : '#5B8FB9'
   },
   Listtodosstyle : {
     flex : 0.89,
-    backgroundColor : '#FFCF96'
+    backgroundColor : 'black'
   },
 });

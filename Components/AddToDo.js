@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
+import { SCROLL_TO_BOTTOM } from "../redux/slices/scrooltobot"
 
 const Addtodo = () => {
 
@@ -12,9 +13,12 @@ const Addtodo = () => {
 
     return (
         <View style={styles.Mainview}>
-            <TouchableOpacity onPress={() => dispatch(NEWTODO({id : uuidv4(), text : "Double Click To Edit !"}))}>
+            <TouchableOpacity onPress={() => {
+                dispatch(NEWTODO({id : uuidv4() , text : "Double Click To Edit !"}))
+                dispatch(SCROLL_TO_BOTTOM("NO_PAYLOAD"));
+            }}>
                 <View>
-                    <Ionicons name="add" size={32} color="black" />
+                    <Ionicons name="add" size={32} color="#5B8FB9" />
                 </View>
             </TouchableOpacity>
         </View>

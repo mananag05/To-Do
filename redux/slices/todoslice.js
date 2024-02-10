@@ -12,6 +12,10 @@ const todoslice = createSlice({
             return state.filter(todo => todo.id !== idToDelete);
         },
         UPDATE_AND_SAVE_TO_DO : (state, action) => {
+            const { text, key } = action.payload;
+            return state.map(todo =>
+                todo.id === key ? { ...todo, text: text } : todo
+            );
 
         }
     }
