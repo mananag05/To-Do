@@ -12,6 +12,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { DELETETODO , UPDATE_AND_SAVE_TO_DO} from "../redux/slices/todoslice";
 import Ionicons from "@expo/vector-icons/Ionicons";
+// https://github.com/expo/vector-icons/blob/master/build/vendor/react-native-vector-icons/glyphmaps/Ionicons.json ( Iconiicons json repo )
 import { useState, useRef } from "react";
 import { resetScrollToBottom } from '../redux/slices/scrooltobot'
 
